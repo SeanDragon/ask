@@ -28,20 +28,20 @@ public class SearchTest {
 
         OcrInfo info = new OcrInfo();
         // info.setQuestion("强者越强，弱者越弱” 的现象，社会学家称之为什么？");
-        // info.setQuestion("标志是 “雪山” 和“雄狮”的好莱坞电影公司分别是？");
-        info.setQuestion("几年前流行的 “冰桶挑战” 是为了呼吁社会关爱 “渐冻人症患者”，请问“世界渐冻人日” 是哪一天？");
+        info.setQuestion("标志是 “雪山” 和“雄狮”的好莱坞电影公司分别是？");
+        // info.setQuestion("几年前流行的 “冰桶挑战” 是为了呼吁社会关爱 “渐冻人症患者”，请问“世界渐冻人日” 是哪一天？");
         List<String> answers = new ArrayList<>(4);
         // answers.add("马太效应");
         // answers.add("二八定则");
         // answers.add("蝴蝶效应");
         // answers.add("皮格马利翁效应");
-        // answers.add("米高梅，派拉蒙");
-        // answers.add("派拉蒙，狮利");
-        // answers.add("梦工场，派拉蒙");
-        // answers.add("派拉蒙，米高梅");
-        answers.add("4 月 14 日");
-        answers.add("6 月 21 日");
-        answers.add("3 月 25 日");
+        answers.add("米高梅，派拉蒙");
+        answers.add("派拉蒙，狮利");
+        answers.add("梦工场，派拉蒙");
+        answers.add("派拉蒙，米高梅");
+        // answers.add("4 月 14 日");
+        // answers.add("6 月 21 日");
+        // answers.add("3 月 25 日");
 
 
         String question = info.getQuestion();

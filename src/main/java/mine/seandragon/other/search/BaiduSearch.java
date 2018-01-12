@@ -24,7 +24,9 @@ public class BaiduSearch implements ISearch {
     @Override
     public long search(String question) throws IOException {
         String path = "http://www.baidu.com/s?tn=ichuner&lm=-1&word=" +
-                URLEncoder.encode(question, "gb2312") + "&rn=1";
+                URLEncoder.encode(question, "UTF-8") +
+                // question +
+                "&rn=1";
 
         Connection connect = Jsoup.connect(path);
         Elements nums = connect.get().getElementsByClass("nums");
