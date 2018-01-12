@@ -74,7 +74,7 @@ public class BaiduOcr implements IOcr {
         OcrInfo info = new OcrInfo();
         boolean questionEd = false;
         StringBuilder question = new StringBuilder();
-        List<String> answers = new ArrayList<>(4);
+        List<String> answers = new ArrayList<>(3);
 
         JSONArray wordsResult = res.getJSONArray("words_result");
 
@@ -99,17 +99,6 @@ public class BaiduOcr implements IOcr {
         info.setQuestion(question.toString())
                 .setAnswers(answers);
 
-        return null;
-
-        // StringBuilder sb = new StringBuilder();
-        // JSONArray wordsResult = res.getJSONArray("words_result");
-        // int wordsResultLen = wordsResult.length();
-        // for (int i = 0; i < wordsResultLen; i++) {
-        //     String newWords = wordsResult.getJSONObject(i).getString("words");
-        //     if (!ToolRegex.isInteger(newWords)) {
-        //         sb.append(newWords);
-        //     }
-        // }
-        // return sb.toString();
+        return info;
     }
 }

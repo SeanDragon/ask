@@ -13,8 +13,8 @@ public class ScPhone {
      * ABD_PATH此处应更改为自己的adb目录
      * HERO_PATH更改自己存放图片的地址
      */
-    private static final String ADB_PATH = "D:\\Application\\adb\\adb ";
-    private static final String HERO_PATH = "D:\\SeanDragon\\Pictures\\OCR";
+    private static final String ADB_PATH = "D:\\Game\\微信跳一跳\\adb  ";
+    private static final String HERO_PATH = "D:\\Administrator\\Pictures\\ocr";
     private static final Long MIN_IMAGE_SIZE = 1000L;
 
     public static File sc() {

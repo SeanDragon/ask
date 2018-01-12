@@ -1,7 +1,13 @@
 package mine.seandragon.other;
 
 import mine.seandragon.other.group.BaiduGroup;
+import mine.seandragon.other.group.BingGroup;
+import mine.seandragon.other.group.GoogleGroup;
 import mine.seandragon.other.group.IGroup;
+import mine.seandragon.other.ocr.BaiduOcr;
+import mine.seandragon.other.ocr.IOcr;
+import mine.seandragon.other.search.GoogleSearch;
+import mine.seandragon.other.search.ISearch;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -159,5 +165,71 @@ public class SearchTest {
             content = content.substring(0, end).replace(",", "");
             System.out.println(content);
         }
+    }
+
+    @Test
+    public void test5() throws IOException {
+        String scFilePath = "D:\\Administrator\\Pictures\\ocr\\1.png";
+        //3 图片识别出OcrInfo(question，answers)
+        long begin = System.currentTimeMillis();
+        IOcr ocr = new BaiduOcr();
+        OcrInfo ocrInfo;
+        try {
+            ocrInfo = ocr.get(scFilePath);
+            System.out.println("文本识别成功");
+            System.out.println(ocrInfo);
+            System.out.println(System.currentTimeMillis() - begin);
+        } catch (OcrException e) {
+            e.printStackTrace();
+            System.err.println("文本识别失败");
+            return;
+        }
+
+        //4 进行查询关联性
+        begin = System.currentTimeMillis();
+        IGroup bingGroup = new BingGroup();
+        try {
+            //5 推举答案
+            String result = bingGroup.group(ocrInfo);
+            System.out.println("必应答案是:\t" + result);
+            System.out.println(System.currentTimeMillis() - begin);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("搜索引擎出问题");
+            return;
+        }
+
+        begin = System.currentTimeMillis();
+        IGroup baiduGroup = new BaiduGroup();
+        try {
+            //5 推举答案
+            String result = baiduGroup.group(ocrInfo);
+            System.out.println("百度答案是:\t" + result);
+            System.out.println(System.currentTimeMillis() - begin);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("搜索引擎出问题");
+            return;
+        }
+
+        begin = System.currentTimeMillis();
+        IGroup googleGroup = new GoogleGroup();
+        try {
+            //5 推举答案
+            String result = googleGroup.group(ocrInfo);
+            System.out.println("谷歌答案是:\t" + result);
+            System.out.println(System.currentTimeMillis() - begin);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("搜索引擎出问题");
+            return;
+        }
+    }
+
+    @Test
+    public void test6() throws IOException {
+        ISearch search = new GoogleSearch();
+        Long a = search.search("a");
+        System.out.println(a);
     }
 }

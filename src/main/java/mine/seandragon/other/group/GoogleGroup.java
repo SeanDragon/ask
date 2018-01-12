@@ -1,7 +1,7 @@
 package mine.seandragon.other.group;
 
 import mine.seandragon.other.OcrInfo;
-import mine.seandragon.other.search.BaiduSearch;
+import mine.seandragon.other.search.GoogleSearch;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,11 +9,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 /**
- * @author SeanDragon
+ * @author Administrator
  * <p>
- * Create By 2018-01-12 18:05
+ * Create By 2018-01-12 23:45
  */
-public class BaiduGroup implements IGroup {
+public class GoogleGroup implements IGroup {
+
     @Override
     public String group(OcrInfo ocrInfo) throws IOException {
 
@@ -27,13 +28,13 @@ public class BaiduGroup implements IGroup {
 
         FutureTask<Long>[] futureQA = new FutureTask[numOfAnswer];
         FutureTask<Long>[] futureAnswers = new FutureTask[numOfAnswer];
-        FutureTask<Long> futureQuestion = new FutureTask(() -> new BaiduSearch().search(question));
+        FutureTask<Long> futureQuestion = new FutureTask(() -> new GoogleSearch().search(question));
 
         new Thread(futureQuestion).start();
         for (int i = 0; i < numOfAnswer; i++) {
             String answer = answers.get(i);
-            futureQA[i] = new FutureTask<>(() -> new BaiduSearch().search(question + " " + answer));
-            futureAnswers[i] = new FutureTask<>(() -> new BaiduSearch().search(answer));
+            futureQA[i] = new FutureTask<>(() -> new GoogleSearch().search(question + " " + answer));
+            futureAnswers[i] = new FutureTask<>(() -> new GoogleSearch().search(answer));
             new Thread(futureQA[i]).start();
             new Thread(futureAnswers[i]).start();
         }

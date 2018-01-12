@@ -16,9 +16,9 @@ public class BaiduSearch implements ISearch {
 
     @Override
     public Long search(String text) throws IOException {
-        String path = "http://www.baidu.com/s?ie=UTF-8&word=" + URLEncoder.encode(text, "UTF-8");
+        String path = "https://www.baidu.com/s?ie=UTF-8&word=" + URLEncoder.encode(text, "UTF-8");
 
-        Document document = Jsoup.parse(new URL(path), 2000);
+        Document document = Jsoup.parse(new URL(path), 2345);
         String content = document.getElementsByClass("nums").get(0).text();
 
         if (content.contains("百度为您找到相关结果约")) {
