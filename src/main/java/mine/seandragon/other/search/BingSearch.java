@@ -9,13 +9,7 @@ import java.io.IOException;
  */
 public class BingSearch implements ISearch {
     @Override
-    public long search(String question) throws IOException {
-
-        return 0;
-    }
-
-    @Override
-    public Object call() throws Exception {
+    public Long search(String text) throws IOException {
         return null;
     }
 }

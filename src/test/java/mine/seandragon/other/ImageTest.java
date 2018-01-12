@@ -17,7 +17,7 @@ public class ImageTest {
     @Test
     public void test1() throws IOException {
         String srcPath = "D:\\SeanDragon\\Pictures\\OCR\\timg2.jpg";
-        String newPath = "D:\\SeanDragon\\Pictures\\OCR\\timg2.jpg";
+        String newPath = "D:\\SeanDragon\\Pictures\\OCR\\timg3.jpg";
         //100, 300, 900, 900
         int x = 100, y = 300, width = 900, height = 900;
         height = 1050;

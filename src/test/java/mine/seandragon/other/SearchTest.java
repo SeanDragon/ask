@@ -1,7 +1,7 @@
 package mine.seandragon.other;
 
-import mine.seandragon.other.search.BaiduSearch;
-import mine.seandragon.other.search.ISearch;
+import mine.seandragon.other.group.BaiduGroup;
+import mine.seandragon.other.group.IGroup;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -13,8 +13,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 
 /**
  * @author SeanDragon
@@ -42,65 +40,11 @@ public class SearchTest {
         // answers.add("4 月 14 日");
         // answers.add("6 月 21 日");
         // answers.add("3 月 25 日");
+        info.setAnswers(answers);
 
-
-        String question = info.getQuestion();
-
-        //搜索
-        long countQuestion = 1;
-        int numOfAnswer = answers.size() > 3 ? 4 : answers.size();
-        long[] countQA = new long[numOfAnswer];
-        long[] countAnswer = new long[numOfAnswer];
-
-        int maxIndex = 0;
-
-        ISearch[] searchQA = new BaiduSearch[numOfAnswer];
-        ISearch[] searchAnswers = new BaiduSearch[numOfAnswer];
-        FutureTask[] futureQA = new FutureTask[numOfAnswer];
-        FutureTask[] futureAnswers = new FutureTask[numOfAnswer];
-        FutureTask futureQuestion = new FutureTask<Long>(new BaiduSearch(question));
-        new Thread(futureQuestion).start();
-        for (int i = 0; i < numOfAnswer; i++) {
-            searchQA[i] = new BaiduSearch(question + " " + answers.get(i));
-            searchAnswers[i] = new BaiduSearch(answers.get(i));
-
-            futureQA[i] = new FutureTask<Long>(searchQA[i]);
-            futureAnswers[i] = new FutureTask<Long>(searchAnswers[i]);
-            new Thread(futureQA[i]).start();
-            new Thread(futureAnswers[i]).start();
-        }
-        try {
-            while (!futureQuestion.isDone()) {
-            }
-            countQuestion = (Long) futureQuestion.get();
-            for (int i = 0; i < numOfAnswer; i++) {
-                while (true) {
-                    if (futureAnswers[i].isDone() && futureQA[i].isDone()) {
-                        break;
-                    }
-                }
-                countQA[i] = (Long) futureQA[i].get();
-                countAnswer[i] = (Long) futureAnswers[i].get();
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        float[] ans = new float[numOfAnswer];
-        for (int i = 0; i < numOfAnswer; i++) {
-            ans[i] = (float) countQA[i] / (float) (countQuestion * countAnswer[i]);
-            maxIndex = (ans[i] > ans[maxIndex]) ? i : maxIndex;
-        }
-        //根据pmi值进行打印搜索结果
-        int[] rank = rank(ans);
-        for (int i : rank) {
-            System.out.print(answers.get(i));
-            System.out.print(" countQA:" + countQA[i]);
-            System.out.print(" countAnswer:" + countAnswer[i]);
-            System.out.println(" ans:" + ans[i]);
-        }
-
-        System.out.println("--------最终结果-------");
-        System.out.println(answers.get(maxIndex));
+        IGroup group = new BaiduGroup();
+        String a = group.group(info);
+        System.out.println(a);
     }
 
 
@@ -126,8 +70,8 @@ public class SearchTest {
 
     @Test
     public void test2() throws IOException {
-        String path = "http://www.baidu.com/s?tn=ichuner&lm=-1&word=" +
-                URLEncoder.encode("标志是 “雪山” 和“雄狮”的好莱坞电影公司分别是？", "gb2312") + "&rn=1";
+        String path = "http://www.baidu.com/s?word=" +
+                URLEncoder.encode("标志是 “雪山” 和“雄狮”的好莱坞电影公司分别是？", "gb2312");
         // HttpReceive httpReceive = ToolSendHttp.post(path);
         // String responseBody = httpReceive.getResponseBody();
         // boolean result = responseBody.contains("百度为您找到相关结果");
@@ -143,6 +87,77 @@ public class SearchTest {
             text = text.substring(start);
             int end = text.indexOf("个");
             text = text.substring(0, end);
+        }
+    }
+
+    @Test
+    public void test3() {
+
+        String question = "";
+        List<String> answers = new ArrayList<>(4);
+        answers.add("米高梅，派拉蒙");
+        answers.add("派拉蒙，狮利");
+        answers.add("梦工场，派拉蒙");
+        answers.add("派拉蒙，米高梅");
+
+        //搜索
+        long countQ = 1;
+        int numOfAnswer = answers.size() > 3 ? 4 : answers.size();
+        long[] countQA = new long[numOfAnswer];
+        long[] countA = new long[numOfAnswer];
+
+        int maxIndex = 0;
+
+
+        //TODO
+        countQ = 106000;
+
+        countQA[0] = 103000;
+        countA[0] = 649000;
+
+        countQA[1] = 102000;
+        countA[1] = 411000;
+
+        countQA[2] = 103000;
+        countA[2] = 411000;
+
+        countQA[3] = 105000;
+        countA[3] = 61500;
+
+
+        float[] ans = new float[numOfAnswer];
+        for (int i = 0; i < numOfAnswer; i++) {
+            ans[i] = (float) countQA[i] / (float) (countQ * countA[i]);
+            maxIndex = (ans[i] > ans[maxIndex]) ? i : maxIndex;
+        }
+        //根据pmi值进行打印搜索结果
+        int[] rank = rank(ans);
+        for (int i : rank) {
+            System.out.print(answers.get(i));
+            System.out.print(" countQA:" + countQA[i]);
+            System.out.print(" countA:" + countA[i]);
+            System.out.println(" ans:" + ans[i]);
+        }
+
+        System.out.println("--------最终结果-------");
+        System.out.println(answers.get(maxIndex));
+    }
+
+    @Test
+    public void test4() throws Exception {
+        String path = "https://www.baidu.com/s?ie=UTF-8&wd=" + URLEncoder.encode("标志是 “雪山” 和“雄狮”的好莱坞电影公司分别是?", "UTF-8");
+        System.out.println(path);
+        Connection connect = Jsoup.connect(path);
+        Elements nums = connect.get().getElementsByClass("nums");
+        Element element = nums.get(0);
+        String content = element.text();
+
+        if (content.contains("百度为您找到相关结果约")) {
+            int start = content.indexOf("百度为您找到相关结果约") + 11;
+            content = content.substring(start);
+            int end = content.indexOf("个");
+            content = content.substring(0, end).replace(",", "");
+            System.out.println(content);
         }
     }
 }
